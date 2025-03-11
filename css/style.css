@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    min-height: 100vh;
+}
+
+#hero {
+    max-width: 50%;
+    height: auto;
+}
+
+span {
+    color: rgb(66, 205, 205);
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+.footer {
+    background: #485664;
+    padding: 60px 0 30px 0;
+}
+
+.footer-info {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 5px;
+    background: rgb(66, 205, 205);
+    z-index: 9999;
+    transition: width 0.2s ease-out;
+}
+
+.navbar {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 標題動畫 */
+.title-icon {
+    animation: rotate 3s linear infinite;
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center; /* 垂直置中 */
+    gap: 10px; /* 控制 LOGO 與標題間距 */
+}
