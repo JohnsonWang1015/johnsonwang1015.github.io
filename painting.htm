@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>我的畫作牆</title>
+    </head>
+    <style>
+        body {
+            font-family: "Helvetica Neue", sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .gallery-item img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 10px 10px 30px #bebebe, -10px -10px 30px #ffffff;
+        }
+    </style>
+    <body>
+        <h1>我的畫作牆</h1>
+        <div id="gallery"></div>
+    </body>
+    <script>
+        const gallery = document.getElementById("gallery");
+        const paintings = JSON.parse(localStorage.getItem("paintings")) || [];
+
+        paintings.forEach((src) => {
+            const div = document.createElement("div");
+            div.className = "gallery-item";
+            const img = document.createElement("img");
+            img.src = src;
+            img.alt = "Painting";
+            div.appendChild(img);
+            gallery.appendChild(div);
+        });
+    </script>
+</html>
