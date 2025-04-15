@@ -1,0 +1,20 @@
+body {
+    font-family: "Times New Roman", serif;
+    background-color: #fff;
+    padding: 100px;
+    text-align: center;
+}
+
+.text-orange-shadow {
+    font-size: 4.8rem;
+    font-weight: bold;
+    text-shadow: 15px 15px 12px orange;
+    margin-bottom: 80px;
+}
+
+.text-multi-shadow {
+    font-size: 4.8rem;
+    font-weight: bold;
+    color: black;
+    text-shadow: 15px 15px 12px gray, 40px 40px 4px silver;
+}

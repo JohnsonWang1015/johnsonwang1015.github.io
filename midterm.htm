@@ -157,7 +157,7 @@
 
             <div>
                 <button id="applyBtn">套用梵谷畫風</button>
-                <button id="resetBtn" class="hidden">重新上傳</button>
+                <button id="resetBtn">重新上傳</button>
                 <button id="downloadBtn" class="hidden">下載畫作</button>
             </div>
 
@@ -284,6 +284,7 @@
             if (!imgElement) return alert("請先上傳圖片");
             loading.style.display = "block";
 
+            applyBtn.disabled = true; // 禁用按鈕，避免重複點擊
             // 載入模型
             await loadModel();
 
@@ -318,6 +319,7 @@
             localStorage.setItem("paintings", JSON.stringify(paintings));
 
             loading.style.display = "none";
+            applyBtn.disabled = false; // 重新啟用按鈕
             imgElement = null; // 清除上傳的圖片
             styleBottleneck.dispose(); // 釋放資源
         }
