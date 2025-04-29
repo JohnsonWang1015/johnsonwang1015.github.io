@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CSS Navbar Position</title>
+    </head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        nav {
+            background-color: #333b50;
+            color: white;
+            padding: 20px;
+            font-weight: bold;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+        }
+        nav ul li a {
+            font-size: 1.2rem;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        main {
+            padding: 20px;
+        }
+        h3 {
+            font-size: 1.5rem;
+            text-shadow: 6px 10px 5px rgba(0, 0, 0, 0.3);
+        }
+        footer {
+            background-color: #333b50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #5c79c2;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 2.2rem;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+    <body>
+        <header id="top">
+            <nav>
+                <ul>
+                    <li><a href="#top">Top</a></li>
+                    <li><a href="#main">Content</a></li>
+                    <li><a href="#bottom">Bottom</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main id="main">
+            <h1 style="padding: 5px">Main Section</h1>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+            <h3>This is h3 block</h3>
+        </main>
+        <footer id="bottom">
+            <h2>Bottom Section</h2>
+            <h5 style="padding-top: 20px; padding-bottom: 10px">
+                &copy; 2025 Web Design. All rights reserved.
+            </h5>
+        </footer>
+        <a href="#top" id="scrollTopBtn">&#8679;</a>
+    </body>
+</html>
