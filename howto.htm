@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>我的畫作牆 - AI 梵谷畫風轉換器</title>
+        <title>使用說明 - AI 梵谷畫風轉換器</title>
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
             rel="stylesheet"
@@ -13,6 +13,13 @@
                 font-family: "Helvetica Neue", sans-serif;
                 background: #e0e0e0;
                 padding-top: 80px;
+            }
+
+            .neumorphism {
+                background: #e0e0e0;
+                border-radius: 20px;
+                box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+                padding: 30px;
             }
 
             .btn-neumorph {
@@ -33,18 +40,16 @@
                     inset -5px -5px 10px #ffffff;
             }
 
-            .gallery-item img {
-                width: 100%;
-                border-radius: 12px;
-                box-shadow: 10px 10px 30px #bebebe, -10px -10px 30px #ffffff;
-                transition: transform 0.3s;
+            ol {
+                padding-left: 20px;
+                color: #444;
             }
 
-            .gallery-item img:hover {
-                transform: scale(1.03);
+            li {
+                margin-bottom: 12px;
             }
 
-            .gallery-title {
+            h1 {
                 text-align: center;
                 margin-bottom: 30px;
                 color: #333;
@@ -67,47 +72,42 @@
                             <a class="nav-link" href="./midterm.htm">首頁</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./painting.htm"
+                            <a class="nav-link" href="./painting.htm"
                                 >我的畫作牆</a
                             >
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./howto.htm">使用說明</a>
+                            <a class="nav-link active" href="./howto.html"
+                                >使用說明</a
+                            >
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        <!-- Main Content -->
+        <!-- 說明區塊 -->
         <div class="container mt-4">
-            <h1 class="gallery-title">我的畫作牆</h1>
-            <div class="row g-4" id="gallery"></div>
+            <h1>使用說明</h1>
+            <div class="neumorphism mx-auto" style="max-width: 700px">
+                <ol>
+                    <li>點擊或拖曳圖片到「上傳區域」以選擇欲轉換的照片。</li>
+                    <li>確認圖片顯示在預覽框中，點擊「套用梵谷畫風」。</li>
+                    <li>
+                        系統將載入模型並自動處理，過程中會顯示跳動的畫筆動畫。
+                    </li>
+                    <li>畫作完成後，可點擊「下載畫作」儲存圖片。</li>
+                    <li>
+                        所有生成的畫作將自動儲存至瀏覽器的本地儲存中，可於「我的畫作牆」查看。
+                    </li>
+                </ol>
+            </div>
 
             <div class="text-center mt-5">
                 <a href="./midterm.htm" class="btn-neumorph">返回首頁</a>
             </div>
         </div>
 
-        <script>
-            const gallery = document.getElementById("gallery");
-            const paintings =
-                JSON.parse(localStorage.getItem("paintings")) || [];
-
-            paintings.forEach((src) => {
-                const col = document.createElement("div");
-                col.className =
-                    "col-12 col-sm-6 col-md-4 col-lg-3 gallery-item";
-
-                const img = document.createElement("img");
-                img.src = src;
-                img.alt = "Painting";
-                img.classList.add("img-fluid");
-
-                col.appendChild(img);
-                gallery.appendChild(col);
-            });
-        </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

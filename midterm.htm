@@ -3,346 +3,328 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>AI 梵谷星夜畫風轉換器</title>
+        <title>AI 梵谷畫風轉換器</title>
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            body {
+                font-family: "Helvetica Neue", sans-serif;
+                background: #e0e0e0;
+                padding-top: 80px;
+            }
+
+            .neumorphism {
+                background: #e0e0e0;
+                border-radius: 20px;
+                box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+                padding: 30px;
+            }
+
+            .btn-neumorph {
+                background: #e0e0e0;
+                border: none;
+                border-radius: 12px;
+                box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
+                padding: 10px 30px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: 0.2s;
+                text-decoration: none;
+                color: black;
+            }
+
+            .btn-neumorph:hover {
+                box-shadow: inset 5px 5px 10px #bebebe,
+                    inset -5px -5px 10px #ffffff;
+            }
+
+            .drop-area {
+                border: 2px dashed #bbb;
+                border-radius: 15px;
+                padding: 40px;
+                margin-bottom: 20px;
+                background: #f0f0f0;
+                cursor: pointer;
+                text-align: center;
+                transition: 0.3s;
+            }
+
+            .drop-area:hover {
+                background: #e8e8e8;
+            }
+
+            #preview,
+            #previewCanvas {
+                border-radius: 10px;
+                margin-top: 20px;
+                max-width: 100%;
+            }
+
+            .loader {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto;
+                position: relative;
+            }
+
+            .brush {
+                width: 20px;
+                height: 60px;
+                background: linear-gradient(145deg, #d6d6d6, #ffffff);
+                border: 2px solid #bbb;
+                border-radius: 10px;
+                position: absolute;
+                bottom: 0;
+                animation: bounce 1s infinite ease-in-out;
+            }
+
+            @keyframes bounce {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+            }
+        </style>
     </head>
-    <style>
-        body {
-            font-family: "Helvetica Neue", sans-serif;
-            background: #e0e0e0;
-            margin: 0;
-            padding: 1%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .container {
-            background: #e0e0e0;
-            border-radius: 20px;
-            box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
-            padding: 30px;
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .drop-area {
-            border: 2px dashed #bbb;
-            border-radius: 15px;
-            padding: 40px;
-            margin-bottom: 20px;
-            transition: 0.3s;
-            background: #f0f0f0;
-            cursor: pointer;
-        }
-        .drop-area:hover {
-            background: #e8e8e8;
-        }
-        #preview {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        #previewCanvas {
-            width: 512px;
-            height: 512px;
-            border-radius: 10px;
-            margin-top: 20px;
-            object-fit: cover;
-        }
-
-        .imagesArea {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        button {
-            background: #e0e0e0;
-            border: none;
-            border-radius: 12px;
-            box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
-            padding: 10px 30px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 20px;
-        }
-        button:hover {
-            box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
-        }
-        .paintingBtn {
-            border: 2px solid #bbb;
-            border-radius: 12px;
-            width: 30%;
-            margin-top: 30px;
-        }
-        .paintingBtn a {
-            text-decoration: none;
-            color: #333;
-            padding: 10px 20px;
-            display: block;
-            text-align: center;
-        }
-
-        #loading {
-            display: none;
-            margin-top: 20px;
-        }
-
-        /* 跳動的畫筆動畫 */
-        .loader {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto;
-            position: relative;
-        }
-        .brush {
-            width: 20px;
-            height: 60px;
-            background: linear-gradient(145deg, #d6d6d6, #ffffff);
-            border: 2px solid #bbb;
-            border-radius: 10px;
-            position: absolute;
-            bottom: 0;
-            animation: bounce 1s infinite ease-in-out;
-        }
-        @keyframes bounce {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-    </style>
     <body>
-        <h1>AI 梵谷「星夜」風格畫作生成器</h1>
-        <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg bg-light fixed-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="./midterm.htm"
+                    >AI 梵谷畫風轉換器</a
+                >
+                <div>
+                    <ul
+                        class="navbar-nav me-auto mb-2 mb-lg-0 d-flex flex-row gap-3"
+                    >
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./midterm.htm"
+                                >首頁</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./painting.htm"
+                                >我的畫作牆</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./howto.htm">使用說明</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Section -->
+        <div class="container neumorphism">
             <div class="drop-area" id="drop-area">
                 <p>拖曳圖片到此，或點擊上傳</p>
                 <input
                     type="file"
                     id="fileElem"
                     accept="image/*"
-                    class="hidden"
-                />
-            </div>
-            <canvas id="previewCanvas" class="hidden"></canvas>
-            <div class="imagesArea">
-                <img
-                    id="preview"
-                    src=""
-                    alt="風格轉換後預覽圖"
-                    class="hidden"
-                />
-                <img
-                    id="styleImg"
-                    src="./images/starry-night.jpg"
-                    alt="梵谷星夜畫作"
-                    class="hidden"
+                    class="d-none"
                 />
             </div>
 
-            <div>
-                <button id="applyBtn">套用梵谷畫風</button>
-                <button id="resetBtn">重新上傳</button>
-                <button id="downloadBtn" class="hidden">下載畫作</button>
+            <canvas
+                id="previewCanvas"
+                class="d-none mx-auto d-block"
+                width="512"
+                height="512"
+            ></canvas>
+            <img
+                id="preview"
+                src=""
+                alt="風格轉換後預覽圖"
+                class="d-none mx-auto d-block"
+            />
+            <img id="styleImg" src="./images/starry-night.jpg" class="d-none" />
+
+            <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
+                <button id="applyBtn" class="btn-neumorph">套用梵谷畫風</button>
+                <button id="resetBtn" class="btn-neumorph">重新上傳</button>
+                <button id="downloadBtn" class="btn-neumorph d-none">
+                    下載畫作
+                </button>
             </div>
 
-            <div id="loading">
-                <div class="loader">
-                    <div class="brush"></div>
-                </div>
+            <div id="loading" class="text-center mt-4 d-none">
+                <div class="loader"><div class="brush"></div></div>
                 <p>正在創作畫作中...</p>
             </div>
+
+            <div class="text-center mt-5">
+                <a href="./painting.htm" class="btn-neumorph">查看我的畫作</a>
+            </div>
         </div>
-        <button class="paintingBtn">
-            <a href="./painting.htm">查看我的畫作</a>
-        </button>
-    </body>
-    <script>
-        const dropArea = document.getElementById("drop-area");
-        const fileInput = document.getElementById("fileElem");
-        const preview = document.getElementById("preview");
-        const previewCanvas = document.getElementById("previewCanvas");
-        const ctx = previewCanvas.getContext("2d");
-        const loading = document.getElementById("loading");
-        const applyBtn = document.getElementById("applyBtn");
-        const resetBtn = document.getElementById("resetBtn");
-        const downloadBtn = document.getElementById("downloadBtn");
-        let imgElement = null;
-        let stylePredictModel, styleTransformModel;
 
-        // 監聽拖曳和點擊事件
-        dropArea.addEventListener("click", () => fileInput.click());
-        fileInput.addEventListener("change", handleFiles);
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+        <script>
+            const dropArea = document.getElementById("drop-area");
+            const fileInput = document.getElementById("fileElem");
+            const preview = document.getElementById("preview");
+            const previewCanvas = document.getElementById("previewCanvas");
+            const ctx = previewCanvas.getContext("2d");
+            const loading = document.getElementById("loading");
+            const applyBtn = document.getElementById("applyBtn");
+            const resetBtn = document.getElementById("resetBtn");
+            const downloadBtn = document.getElementById("downloadBtn");
+            let imgElement = null;
+            let stylePredictModel, styleTransformModel;
 
-        dropArea.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            dropArea.style.background = "#ddd";
-        });
+            dropArea.addEventListener("click", () => fileInput.click());
+            fileInput.addEventListener("change", handleFiles);
 
-        dropArea.addEventListener("dragleave", () => {
-            dropArea.style.background = "#f0f0f0";
-        });
-
-        dropArea.addEventListener("drop", (e) => {
-            e.preventDefault();
-            dropArea.style.background = "#f0f0f0";
-            const files = e.dataTransfer.files;
-            handleFiles({ target: { files } });
-        });
-
-        // 處理檔案上傳
-        function handleFiles(event) {
-            const file = event.target.files[0];
-            if (!file) return alert("請選擇圖片檔案");
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                imgElement = new Image();
-                imgElement.onload = function () {
-                    ctx.clearRect(
-                        0,
-                        0,
-                        previewCanvas.width,
-                        previewCanvas.height
-                    );
-                    ctx.drawImage(
-                        imgElement,
-                        0,
-                        0,
-                        previewCanvas.width,
-                        previewCanvas.height
-                    );
-                };
-                imgElement.src = e.target.result;
-                preview.classList.add("hidden");
-                previewCanvas.classList.remove("hidden");
-                downloadBtn.classList.add("hidden");
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // 載入模型
-        async function loadModel() {
-            stylePredictModel = await tf.loadGraphModel(
-                "./models/style/model.json"
-            );
-            styleTransformModel = await tf.loadGraphModel(
-                "./models/transformer/model.json"
-            );
-        }
-
-        // 預測風格向量
-        async function stylePredict(styleImage) {
-            const styleTensor = tf.tidy(() =>
-                tf.browser
-                    .fromPixels(styleImage)
-                    .toFloat()
-                    .div(tf.scalar(255))
-                    .resizeBilinear([256, 256])
-                    .expandDims()
-            );
-            const bottleneck = await stylePredictModel.predict(styleTensor);
-            styleTensor.dispose();
-            return bottleneck;
-        }
-
-        // 執行風格轉換
-        async function styleTransfer(contentImage, styleBottleneck) {
-            const contentTensor = tf.tidy(() =>
-                tf.browser
-                    .fromPixels(contentImage)
-                    .toFloat()
-                    .div(tf.scalar(255))
-                    .resizeBilinear([384, 384])
-                    .expandDims()
-            );
-            const stylized = await styleTransformModel.executeAsync({
-                Placeholder: contentTensor,
-                Placeholder_1: styleBottleneck,
+            dropArea.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                dropArea.style.background = "#ddd";
             });
-            contentTensor.dispose();
-            return stylized;
-        }
 
-        // 套用風格轉換
-        async function applyStyle() {
-            if (!imgElement) return alert("請先上傳圖片");
-            loading.style.display = "block";
+            dropArea.addEventListener("dragleave", () => {
+                dropArea.style.background = "#f0f0f0";
+            });
 
-            applyBtn.disabled = true; // 禁用按鈕，避免重複點擊
-            // 載入模型
-            await loadModel();
+            dropArea.addEventListener("drop", (e) => {
+                e.preventDefault();
+                dropArea.style.background = "#f0f0f0";
+                const files = e.dataTransfer.files;
+                handleFiles({ target: { files } });
+            });
 
-            const styleBottleneck = await stylePredict(
-                document.getElementById("styleImg") // 預設的梵谷畫作
-            );
+            function handleFiles(event) {
+                const file = event.target.files[0];
+                if (!file) return alert("請選擇圖片檔案");
 
-            // 執行風格轉換
-            const stylized = await styleTransfer(
-                previewCanvas,
-                styleBottleneck
-            );
-            const result = stylized.squeeze(); // 去除多餘的維度
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imgElement = new Image();
+                    imgElement.onload = function () {
+                        ctx.clearRect(
+                            0,
+                            0,
+                            previewCanvas.width,
+                            previewCanvas.height
+                        );
+                        ctx.drawImage(
+                            imgElement,
+                            0,
+                            0,
+                            previewCanvas.width,
+                            previewCanvas.height
+                        );
+                    };
+                    imgElement.src = e.target.result;
+                    preview.classList.add("d-none");
+                    previewCanvas.classList.remove("d-none");
+                    downloadBtn.classList.add("d-none");
+                };
+                reader.readAsDataURL(file);
+            }
 
-            await tf.browser.toPixels(result, previewCanvas); // 將結果輸出到 canvas
+            async function loadModel() {
+                stylePredictModel = await tf.loadGraphModel(
+                    "./models/style/model.json"
+                );
+                styleTransformModel = await tf.loadGraphModel(
+                    "./models/transformer/model.json"
+                );
+            }
 
-            // 輸出到 <img> 並儲存至 Blob
-            const outputCanvas = document.createElement("canvas");
-            outputCanvas.width = previewCanvas.width;
-            outputCanvas.height = previewCanvas.height;
-            await tf.browser.toPixels(result, outputCanvas);
-            const dataURL = outputCanvas.toDataURL();
+            async function stylePredict(styleImage) {
+                const styleTensor = tf.tidy(() =>
+                    tf.browser
+                        .fromPixels(styleImage)
+                        .toFloat()
+                        .div(tf.scalar(255))
+                        .resizeBilinear([256, 256])
+                        .expandDims()
+                );
+                const bottleneck = await stylePredictModel.predict(styleTensor);
+                styleTensor.dispose();
+                return bottleneck;
+            }
 
-            preview.src = dataURL;
-            preview.classList.remove("hidden");
-            previewCanvas.classList.add("hidden");
-            downloadBtn.classList.remove("hidden");
+            async function styleTransfer(contentImage, styleBottleneck) {
+                const contentTensor = tf.tidy(() =>
+                    tf.browser
+                        .fromPixels(contentImage)
+                        .toFloat()
+                        .div(tf.scalar(255))
+                        .resizeBilinear([384, 384])
+                        .expandDims()
+                );
+                const stylized = await styleTransformModel.executeAsync({
+                    Placeholder: contentTensor,
+                    Placeholder_1: styleBottleneck,
+                });
+                contentTensor.dispose();
+                return stylized;
+            }
 
-            // 儲存到 localStorage
-            let paintings = JSON.parse(localStorage.getItem("paintings")) || [];
-            paintings.unshift(dataURL); // 新增到最前面
-            localStorage.setItem("paintings", JSON.stringify(paintings));
+            async function applyStyle() {
+                if (!imgElement) return alert("請先上傳圖片");
+                loading.classList.remove("d-none");
+                applyBtn.disabled = true;
 
-            loading.style.display = "none";
-            applyBtn.disabled = false; // 重新啟用按鈕
-            imgElement = null; // 清除上傳的圖片
-            styleBottleneck.dispose(); // 釋放資源
-        }
+                await loadModel();
+                const styleBottleneck = await stylePredict(
+                    document.getElementById("styleImg")
+                );
+                const stylized = await styleTransfer(
+                    previewCanvas,
+                    styleBottleneck
+                );
+                const result = stylized.squeeze();
 
-        applyBtn.addEventListener("click", applyStyle);
+                await tf.browser.toPixels(result, previewCanvas);
+                const outputCanvas = document.createElement("canvas");
+                outputCanvas.width = previewCanvas.width;
+                outputCanvas.height = previewCanvas.height;
+                await tf.browser.toPixels(result, outputCanvas);
+                const dataURL = outputCanvas.toDataURL();
 
-        // 重置上傳
-        resetBtn.addEventListener("click", () => {
-            imgElement = null;
-            preview.src = "";
-            preview.classList.add("hidden");
-            previewCanvas.classList.add("hidden");
-            fileInput.value = "";
-            downloadBtn.classList.add("hidden");
-            ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
-        });
+                preview.src = dataURL;
+                preview.classList.remove("d-none");
+                previewCanvas.classList.add("d-none");
+                downloadBtn.classList.remove("d-none");
 
-        // 下載畫作
-        downloadBtn.addEventListener("click", () => {
-            const a = document.createElement("a");
-            a.href = preview.src;
-            a.download = `my-van-gogh-style-art-${new Date().getTime()}.png`;
-            a.click();
-        });
-    </script>
+                let paintings =
+                    JSON.parse(localStorage.getItem("paintings")) || [];
+                paintings.unshift(dataURL);
+                localStorage.setItem("paintings", JSON.stringify(paintings));
+
+                loading.classList.add("d-none");
+                applyBtn.disabled = false;
+                imgElement = null;
+                styleBottleneck.dispose();
+            }
+
+            applyBtn.addEventListener("click", applyStyle);
+
+            resetBtn.addEventListener("click", () => {
+                imgElement = null;
+                preview.src = "";
+                preview.classList.add("d-none");
+                previewCanvas.classList.add("d-none");
+                fileInput.value = "";
+                downloadBtn.classList.add("d-none");
+                ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+            });
+
+            downloadBtn.addEventListener("click", () => {
+                const a = document.createElement("a");
+                a.href = preview.src;
+                a.download = `my-van-gogh-style-art-${new Date().getTime()}.png`;
+                a.click();
+            });
+        </script>
+    </body>
 </html>
